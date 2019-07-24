@@ -9,9 +9,12 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -34,6 +37,8 @@ public class ClassTransformer implements IClassTransformer {
 				return transformMethods(clazz, this::patchSetWorldTime);
 			case "net.minecraft.client.network.NetHandlerPlayClient":
 				return transformMethods(clazz, this::patchSetWorldTimeCall);
+			case "net.minecraft.client.renderer.tileentity.TileEntityBeaconRenderer":
+				return transformMethods(clazz, this::patchRenderBeamSegment);
 			default:
 				return clazz;
 		}
@@ -105,6 +110,19 @@ public class ClassTransformer implements IClassTransformer {
 					method.instructions.remove(ain);
 				}
 			}
+		}
+	}
+
+	private void patchRenderBeamSegment(MethodNode method) {
+		if (method.name.equals(MCPNames.method("func_188205_a")) && method.desc.equals("(DDDDDDII[FDD)V")) {
+			InsnList insert = new InsnList();
+			LabelNode label = new LabelNode();
+			insert.add(new FieldInsnNode(Opcodes.GETSTATIC, "nessiesson/replayaddon/Configuration", "renderBeaconBeam", "Z"));
+			insert.add(new JumpInsnNode(Opcodes.IFNE, label));
+			insert.add(new InsnNode(Opcodes.RETURN));
+			insert.add(label);
+			insert.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
+			method.instructions.insert(method.instructions.getFirst(), insert);
 		}
 	}
 }

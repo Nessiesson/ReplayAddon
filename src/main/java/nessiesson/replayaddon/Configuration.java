@@ -7,4 +7,5 @@ public class Configuration {
 	public static boolean alwaysRenderEntities = true;
 	public static boolean alwaysRenderTileEntities = true;
 	public static String timeFunction = "t";
+	public static boolean renderBeaconBeam = true;
 }

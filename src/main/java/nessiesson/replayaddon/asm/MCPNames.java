@@ -13,6 +13,7 @@ public class MCPNames {
 			{"func_178635_a", "shouldRender"},
 			{"func_180446_a", "renderEntities"},
 			{"func_180546_a", "render"},
+			{"func_188205_a", "renderBeamSegment"},
 			// @formatter:on
 	};
 
