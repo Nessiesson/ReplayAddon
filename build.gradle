@@ -1,0 +1,56 @@
+buildscript {
+	repositories {
+		jcenter()
+		maven { url = "http://files.minecraftforge.net/maven" }
+	}
+	dependencies {
+		classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+	}
+}
+apply plugin: "net.minecraftforge.gradle.forge"
+
+version = "1.0"
+def modName = "ReplayAddon".toString()
+def modId = modName.toLowerCase()
+group = "nessiesson.${modId}"
+def loadingPlugin = "${group}.asm.${modName}LoadingPlugin"
+archivesBaseName = modId
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
+
+
+jar.manifest.attributes(
+		"FMLCorePluginContainsFMLMod": true,
+		"FMLCorePlugin": loadingPlugin
+)
+
+minecraft {
+	version = "1.12-14.21.1.2443"
+	runDir = "run"
+	mappings = "stable_39"
+	coreMod = loadingPlugin
+
+	replaceIn "Reference.java"
+	replace "@VERSION@", project.version
+	replace "@MODNAME@", modName
+	replace "@MODID@", modId
+}
+
+processResources {
+	inputs.property "modName", modName
+	inputs.property "modId", modId
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
+
+	from(sourceSets.main.resources.srcDirs) {
+		include "mcmod.info"
+		include "pack.mcmeta"
+
+		expand "version": project.version, "mcversion": project.minecraft.version, "modName": modName, "modId": modId
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "mcmod.info"
+		exclude "pack.mcmeta"
+	}
+}

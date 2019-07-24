@@ -1,0 +1,18 @@
+[
+	{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "Somewhat useful addons for ReplayMod.",
+		"version": "${version}",
+		"mcversion": "${mcversion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": [
+			"nessie"
+		],
+		"credits": "",
+		"logoFile": "",
+		"screenshots": [],
+		"dependencies": []
+	}
+]
