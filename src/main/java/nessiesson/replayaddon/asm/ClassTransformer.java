@@ -27,7 +27,7 @@ public class ClassTransformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] clazz) {
-		logger.info(transformedName);
+		//logger.info(transformedName);
 		switch (transformedName) {
 			case "net.minecraft.client.renderer.RenderGlobal":
 				return transformMethods(clazz, this::patchRenderEntities);
