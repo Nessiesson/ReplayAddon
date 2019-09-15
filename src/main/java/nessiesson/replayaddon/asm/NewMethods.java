@@ -23,7 +23,7 @@ public class NewMethods {
 		}
 
 		if (!Configuration.shouldRenderSpectators && player != null) {
-			return false;
+			return !player.isSpectator();
 		}
 
 		if (Configuration.alwaysRenderEntities && player == null) {
