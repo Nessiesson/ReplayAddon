@@ -10,4 +10,5 @@ public class Configuration {
 	public static String timeFunction = "t";
 	public static boolean renderBeaconBeam = true; // used in ClassTransformer
 	public static boolean shouldSpamLog = false;
+	public static boolean shouldRenderSpectators = true;
 }

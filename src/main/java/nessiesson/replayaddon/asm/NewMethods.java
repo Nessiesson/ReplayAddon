@@ -5,6 +5,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.script.Bindings;
@@ -16,9 +17,19 @@ public class NewMethods {
 	private static Bindings bindings = engine.createBindings();
 
 	public static boolean overrideShouldRender(RenderManager rm, Entity e, ICamera ic, double x, double y, double z) {
-		if (Configuration.alwaysRenderEntities) {
+		EntityPlayer player = null;
+		if (e instanceof EntityPlayer) {
+			player = (EntityPlayer) e;
+		}
+
+		if (!Configuration.shouldRenderSpectators && player != null) {
+			return false;
+		}
+
+		if (Configuration.alwaysRenderEntities && player == null) {
 			return true;
 		}
+
 		return rm.shouldRender(e, ic, x, y, z);
 	}
 
