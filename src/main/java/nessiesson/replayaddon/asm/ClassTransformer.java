@@ -39,6 +39,8 @@ public class ClassTransformer implements IClassTransformer {
 				return transformMethods(clazz, this::patchSetWorldTimeCall);
 			case "net.minecraft.client.renderer.tileentity.TileEntityBeaconRenderer":
 				return transformMethods(clazz, this::patchRenderBeamSegment);
+			case "net.minecraft.world.World":
+				return transformMethods(clazz, this::patchGetRainStrength);
 			default:
 				return clazz;
 		}
@@ -120,6 +122,20 @@ public class ClassTransformer implements IClassTransformer {
 			insert.add(new FieldInsnNode(Opcodes.GETSTATIC, "nessiesson/replayaddon/Configuration", "renderBeaconBeam", "Z"));
 			insert.add(new JumpInsnNode(Opcodes.IFNE, label));
 			insert.add(new InsnNode(Opcodes.RETURN));
+			insert.add(label);
+			insert.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
+			method.instructions.insert(method.instructions.getFirst(), insert);
+		}
+	}
+
+	private void patchGetRainStrength(MethodNode method) {
+		if (method.name.equals(MCPNames.method("func_72867_j")) && method.desc.equals("(F)F")) {
+			InsnList insert = new InsnList();
+			LabelNode label = new LabelNode();
+			insert.add(new FieldInsnNode(Opcodes.GETSTATIC, "nessiesson/replayaddon/Configuration", "noRain", "Z"));
+			insert.add(new JumpInsnNode(Opcodes.IFNE, label));
+			insert.add(new InsnNode(Opcodes.FCONST_0));
+			insert.add(new InsnNode(Opcodes.FRETURN));
 			insert.add(label);
 			insert.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
 			method.instructions.insert(method.instructions.getFirst(), insert);

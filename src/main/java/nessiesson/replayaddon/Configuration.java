@@ -11,4 +11,5 @@ public class Configuration {
 	public static boolean renderBeaconBeam = true; // used in ClassTransformer
 	public static boolean shouldSpamLog = false;
 	public static boolean shouldRenderSpectators = true;
+	public static boolean noRain = true;
 }

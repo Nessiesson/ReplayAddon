@@ -60,5 +60,4 @@ public class NewMethods {
 	public static void noopSetWorldTimeCall(long time) {
 		// noop
 	}
-
 }

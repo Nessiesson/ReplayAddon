@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 public class MCPNames {
 	private static final String[][] names = {
 			// @formatter:off
+			{"func_72867_j",  "getRainStrength"},
 			{"func_72877_b" , "setWorldTime"},
 			{"func_147285_a", "handleTimeUpdate"},
 			{"func_145835_a", "getDistanceSq"},
