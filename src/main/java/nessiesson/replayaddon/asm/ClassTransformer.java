@@ -133,7 +133,7 @@ public class ClassTransformer implements IClassTransformer {
 			InsnList insert = new InsnList();
 			LabelNode label = new LabelNode();
 			insert.add(new FieldInsnNode(Opcodes.GETSTATIC, "nessiesson/replayaddon/Configuration", "noRain", "Z"));
-			insert.add(new JumpInsnNode(Opcodes.IFNE, label));
+			insert.add(new JumpInsnNode(Opcodes.IFEQ, label));
 			insert.add(new InsnNode(Opcodes.FCONST_0));
 			insert.add(new InsnNode(Opcodes.FRETURN));
 			insert.add(label);
