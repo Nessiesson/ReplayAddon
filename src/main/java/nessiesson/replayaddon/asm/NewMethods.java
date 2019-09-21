@@ -16,7 +16,8 @@ public class NewMethods {
 	private static ScriptEngine engine = new ScriptEngineManager(null).getEngineByName("nashorn");
 	private static Bindings bindings = engine.createBindings();
 
-	public static boolean overrideShouldRender(RenderManager rm, Entity e, ICamera ic, double x, double y, double z) {
+	public static boolean overrideS
+	shouldRender(RenderManager rm, Entity e, ICamera ic, double x, double y, double z) {
 		EntityPlayer player = null;
 		if (e instanceof EntityPlayer) {
 			player = (EntityPlayer) e;
@@ -57,7 +58,7 @@ public class NewMethods {
 		world.provider.setWorldTime(time);
 	}
 
-	public static void noopSetWorldTimeCall(long time) {
+	publ    ic static void noopSetWorldTimeCall(long time) {
 		// noop
 	}
 }
