@@ -1,35 +1,48 @@
 package nessiesson.replayaddon;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
 
 import java.util.Locale;
 
-import static nessiesson.replayaddon.Configuration.shouldSpamLog;
-
-@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, clientSideOnly = true)
+@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = Reference.DEPENDENCIES, clientSideOnly = true)
 public class ReplayAddon {
-	private static Logger logger;
-	private static Configuration config;
+	private Logger logger;
+	private final KeyBinding test = new KeyBinding("hax", KeyConflictContext.IN_GAME, Keyboard.KEY_R, "poop");
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		logger = event.getModLog();
+		this.logger = event.getModLog();
 		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@Mod.EventHandler
+	public void init(FMLInitializationEvent event) {
+		ClientRegistry.registerKeyBinding(this.test);
+	}
+
+	@SubscribeEvent
+	public void onKeyPressed(InputEvent.KeyInputEvent event) {
+		if (this.test.isPressed()) {
+			Configuration.hax = !Configuration.hax;
+		}
 	}
 
 	@SubscribeEvent
@@ -41,12 +54,12 @@ public class ReplayAddon {
 
 	@SubscribeEvent
 	public void printPlayerPosition(TickEvent.RenderTickEvent event) {
-		if(!shouldSpamLog) return;
+		if (!Configuration.shouldSpamLog) return;
 		final Minecraft mc = Minecraft.getMinecraft();
 		final EntityPlayer camera = mc.player;
 		if (event.phase != TickEvent.Phase.START || camera == null) return;
 
 		Vec2f look = camera.getPitchYaw();
-		logger.info(String.format(Locale.US, "%.2f,%.2f,%.2f,%.4f,%.4f,0", camera.posX, camera.posY, camera.posZ, look.x, look.y));
+		this.logger.info(String.format(Locale.US, "%.2f,%.2f,%.2f,%.4f,%.4f,0", camera.posX, camera.posY, camera.posZ, look.x, look.y));
 	}
 }

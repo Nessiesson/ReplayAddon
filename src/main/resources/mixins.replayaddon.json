@@ -1,0 +1,14 @@
+{
+	"package": "nessiesson.replayaddon.mixin",
+	"refmap": "mixins.replayaddon.refmap.json",
+	"compatibilityLevel": "JAVA_8",
+	"minVersion": "0.7.5",
+	"mixins": [
+		"MixinNetHandlerPlayClient",
+		"MixinRenderGlobal",
+		"MixinTileEntityBeaconRenderer",
+		"MixinTileEntityRendererDispatcher",
+		"MixinWorld",
+		"MixinWorldClient"
+	]
+}

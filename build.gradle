@@ -1,40 +1,74 @@
 buildscript {
 	repositories {
 		jcenter()
-		maven { url = "http://files.minecraftforge.net/maven" }
+		maven { url = "https://files.minecraftforge.net/maven" }
+		maven { url = "https://repo.spongepowered.org/maven" }
 	}
 	dependencies {
 		classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+		classpath "org.spongepowered:mixingradle:0.6-SNAPSHOT"
 	}
 }
-apply plugin: "net.minecraftforge.gradle.forge"
 
-version = "1.0"
+apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: "org.spongepowered.mixin"
+
+version = "1.1.0"
 def modName = "ReplayAddon".toString()
 def modId = modName.toLowerCase()
 group = "nessiesson.${modId}"
-def loadingPlugin = "${group}.asm.${modName}LoadingPlugin"
+def loadingPlugin = "${group}.LoadingPlugin"
 archivesBaseName = modId
+boolean isObfuscated = project.gradle.startParameter.taskNames.contains("build")
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8"
 
-
 jar.manifest.attributes(
 		"FMLCorePluginContainsFMLMod": true,
-		"FMLCorePlugin": loadingPlugin
+		"FMLCorePlugin": loadingPlugin,
+		"ForceLoadAsMod": true,
+		"TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
 )
 
 minecraft {
-	version = "1.12-14.21.1.2443"
+	version = "1.12.2-14.23.5.2847"
 	runDir = "run"
 	mappings = "stable_39"
 	coreMod = loadingPlugin
 
-	replaceIn "Reference.java"
 	replace "@VERSION@", project.version
 	replace "@MODNAME@", modName
 	replace "@MODID@", modId
+	if(isObfuscated) {
+		replace "@DEPENDENCIES@", "required-after:replaymod"
+	} else {
+		replace "@DEPENDENCIES@", ""
+	}
+
+	def args = [
+			"-Dmixin.debug=true"
+	]
+	clientJvmArgs.addAll(args)
+	serverJvmArgs.addAll(args)
 }
+
+repositories {
+	maven { url = "https://repo.spongepowered.org/maven" }
+}
+
+dependencies {
+	compile("org.spongepowered:mixin:0.7.5-SNAPSHOT") {
+		exclude module: "asm-commons"
+		exclude module: "asm-tree"
+		exclude module: "launchwrapper"
+		exclude module: "guava"
+		exclude module: "log4j-core"
+		exclude module: "gson"
+		exclude module: "commons-io"
+	}
+}
+
+mixin.add sourceSets.main, "mixins.replayaddon.refmap.json"
 
 processResources {
 	inputs.property "modName", modName
@@ -44,13 +78,11 @@ processResources {
 
 	from(sourceSets.main.resources.srcDirs) {
 		include "mcmod.info"
-		include "pack.mcmeta"
 
 		expand "version": project.version, "mcversion": project.minecraft.version, "modName": modName, "modId": modId
 	}
 
 	from(sourceSets.main.resources.srcDirs) {
 		exclude "mcmod.info"
-		exclude "pack.mcmeta"
 	}
 }
