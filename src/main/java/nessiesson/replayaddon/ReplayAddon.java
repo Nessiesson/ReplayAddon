@@ -31,6 +31,7 @@ public class ReplayAddon {
 	public void preInit(FMLPreInitializationEvent event) {
 		this.logger = event.getModLog();
 		MinecraftForge.EVENT_BUS.register(this);
+		Configuration.fovFunction = String.valueOf(Minecraft.getMinecraft().gameSettings.fovSetting);
 	}
 
 	@SubscribeEvent

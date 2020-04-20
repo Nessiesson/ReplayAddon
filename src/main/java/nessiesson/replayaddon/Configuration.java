@@ -13,7 +13,7 @@ public class Configuration {
 	@Config.Comment("Toggles whether to use custom time or default time.")
 	public static boolean customTime = false;
 	@Config.Comment("Specifies what custom javascript expression to use [requires `customFOV=true`], you can use either `f`, `t`, or `x` as a variable for the world time.")
-	public static String fovFunction = "f";
+	public static String fovFunction = "70";
 	@Config.Comment("Toggles whether to use custom FOV or default (locked) FOV.")
 	public static boolean customFOV = false;
 	@Config.Comment("Toggles rendering of beacon beams.")
