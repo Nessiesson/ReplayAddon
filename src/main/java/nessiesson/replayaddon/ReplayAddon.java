@@ -53,15 +53,14 @@ public class ReplayAddon {
 	@SubscribeEvent
 	public void dynamicFOV(TickEvent.RenderTickEvent event) {
 		if (!Configuration.customFOV || event.phase != TickEvent.Phase.START) return;
-		final Minecraft mc = Minecraft.getMinecraft();
-		final EntityPlayer camera = mc.player;
-		final World world = camera.world;
-		final long worldTime = world.getTotalWorldTime();
-		bindings.put("f", worldTime);
-		bindings.put("t", worldTime);
-		bindings.put("x", worldTime);
-
 		try {
+			final Minecraft mc = Minecraft.getMinecraft();
+			final EntityPlayer camera = mc.player;
+			final World world = camera.world;
+			final long worldTime = world.getTotalWorldTime();
+			bindings.put("f", worldTime);
+			bindings.put("t", worldTime);
+			bindings.put("x", worldTime);
 			final float fov = ((Number) ReplayAddon.engine.eval(Configuration.fovFunction, bindings)).floatValue();
 			mc.gameSettings.setOptionFloatValue(GameSettings.Options.FOV, fov);
 		} catch (Exception ignored) {
