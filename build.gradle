@@ -13,7 +13,7 @@ buildscript {
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "org.spongepowered.mixin"
 
-version = "1.1.0"
+version = "1.1.1"
 def modName = "ReplayAddon".toString()
 def modId = modName.toLowerCase()
 group = "nessiesson.${modId}"
@@ -39,11 +39,7 @@ minecraft {
 	replace "@VERSION@", project.version
 	replace "@MODNAME@", modName
 	replace "@MODID@", modId
-	if(isObfuscated) {
-		replace "@DEPENDENCIES@", "required-after:replaymod"
-	} else {
-		replace "@DEPENDENCIES@", ""
-	}
+	replace "@DEPENDENCIES@", isObfuscated ? "required-after:replaymod" : ""
 
 	def args = [
 			"-Dmixin.debug=true"

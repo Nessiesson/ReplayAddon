@@ -4,9 +4,13 @@
 	"compatibilityLevel": "JAVA_8",
 	"minVersion": "0.7.5",
 	"mixins": [
+		"MixinEntityItem",
 		"MixinNetHandlerPlayClient",
+		"MixinRenderChunkOptifine",
 		"MixinRenderGlobal",
 		"MixinTileEntityBeaconRenderer",
+		"MixinTileEntityPiston",
+		"MixinTileEntityPistonRenderer",
 		"MixinTileEntityRendererDispatcher",
 		"MixinWorld",
 		"MixinWorldClient"
