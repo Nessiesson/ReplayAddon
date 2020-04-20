@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinTileEntityBeaconRenderer {
 	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
 	private void onRender(TileEntityBeacon te, double x, double y, double z, float partialTicks, int destroyStage, float alpha, CallbackInfo ci) {
-		if (Configuration.renderBeaconBeam) {
+		if (!Configuration.renderBeaconBeam) {
 			ci.cancel();
 		}
 	}
